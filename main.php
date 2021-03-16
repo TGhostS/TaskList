@@ -8,7 +8,6 @@ $link = mysqli_connect($host, $user, $password, $database)
 // выполняем операции с базой данных
 $login = htmlentities(mysqli_real_escape_string($link, $_POST['register_name']));
 $password = htmlentities(mysqli_real_escape_string($link, $_POST['register_password']));
-
 if(preg_match("/^[a-zA-Z0-9]+$/",$_POST['register_name']))
 {
     if ($login != "" && $password != "")
@@ -18,9 +17,13 @@ if(preg_match("/^[a-zA-Z0-9]+$/",$_POST['register_name']))
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
             if($result)
             {
-                echo "Данные добавлены";
                 mysqli_close($link);
+                setcookie("login",$login);
+                setcookie("password",$password);
+                header('location: tasklist.php');
+                exit();
             }
+            
     }
     else
     {
