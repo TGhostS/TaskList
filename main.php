@@ -16,7 +16,7 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
     $query->execute($data);
     if($query->rowCount() > 0)
     {
-        while ($row = mysqli_fetch_assoc($query)) {
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $_SESSION['user_id'] = $row['id'];
             header('location: tasklist.php');
         }
@@ -33,8 +33,7 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
         $query->execute($data);
         if($query->rowCount() > 0)
         {
-            echo $query;
-            while ($row = mysqli_fetch_assoc($query)) {
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $_SESSION['user_id'] = $row['id'];
                 header('location: tasklist.php');
             }
