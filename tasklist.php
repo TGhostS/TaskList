@@ -2,37 +2,29 @@
 /**********************************************************/
            /* Find id user,connect db */
 require_once 'connection.php'; // подключаем скрипт
-$link = mysqli_connect($host, $user, $password, $database) 
-    or die("Ошибка " . mysqli_error($link)); 
-$login = $_COOKIE['login'];
-$password = $_COOKIE['password'];
-if($login == "" || $password == "")
+session_start();
+if(!isset($_SESSION["user_id"]))
 {
-    header('location: register.php');
-    exit();
-} 
-$query_find_id ="SELECT id FROM users Where '$login' = login and '$password' = password ";
-$result = mysqli_query($link,$query_find_id);
-if($result)
-{
-   $id = mysqli_fetch_row($result)[0];
-   setcookie('id',$id);
+    header("location:index.php");
 }
+$id = $_SESSION["user_id"];
 
 /**********************************************************/
                 /*Delete All Tasks */
 if(isset($_POST['RemoveAll']))
 {
-    $query ="DELETE FROM tasks WHERE user_id = '$id'";
-    mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+    $data = array('id' => $id);
+    $query = $db -> prepare("DELETE FROM tasks WHERE user_id = :id ");
+    $query -> execute($data);
     header('location: tasklist.php');
 }
 /**********************************************************/
                 /*Ready All Tasks */
 if(isset($_POST['ReadyAll']))
 {
-    $query ="UPDATE tasks SET status = 1 WHERE '$id' = user_id";
-    mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+    $data = array('id' => $id);
+    $query = $db -> prepare("UPDATE tasks SET status = 1 WHERE user_id = :id");
+    $query->execute($data);
     header('location: tasklist.php');
 }
 /**********************************************************/
@@ -42,23 +34,26 @@ if(isset($_POST['ready']))
     if($_POST['status'] == 0)
     {
         $id = $_POST['Id'];
-        $query ="UPDATE tasks SET status = 1 WHERE '$id' = id";
-        $result_task = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+        $data = array('id' => $id);
+        $query = $db -> prepare("UPDATE tasks SET status = 1 WHERE id = :id");
+        $query->execute($data);
         header('location: tasklist.php');
     }
     if($_POST['status'] == 1)
     {
         $id = $_POST['Id'];
-        $query ="UPDATE tasks SET status = 0 WHERE '$id' = id";
-        $result_task = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+        $data = array('id' => $id);
+        $query = $db -> prepare("UPDATE tasks SET status = 0 WHERE id = :id");
+        $query->execute($data);
         header('location: tasklist.php');
     }
 }
 if(isset($_POST['delete']))
 {
     $id = $_POST['Id'];
-    $query ="DELETE FROM tasks Where '$id' = id";
-    $result_task = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+    $data = array('id' => $id);
+    $query = $db -> prepare("DELETE FROM tasks  WHERE id = :id");
+    $query->execute($data);
     header('location: tasklist.php');
 }
 /**********************************************************/
@@ -66,53 +61,53 @@ if(isset($_POST['delete']))
 if(isset($_POST['AddTask']))
 {
     $date = date('Y-m-d');
-    $NewTask = htmlentities(mysqli_real_escape_string($link, $_POST['NewTask']));
-    $query = "INSERT INTO tasks (user_id,description,created_at) VALUES ('$id','$NewTask','$date')";
-    $result_task = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
+    $NewTask = htmlentities($_POST['NewTask']);
+    $data = array('id' => $id,'NewTask' => $NewTask,'date' => $date);
+    $query = $db -> prepare("INSERT INTO tasks (user_id,description,created_at) VALUES (:id,:NewTask,:date)");
+    $query->execute($data);
     header('location: tasklist.php');
 }
 /**********************************************************/
         /* Create function for create Tasks */
-function CreateTasks($id,$link)
+function CreateTasks($id,$db)
 {
-$query_find_tasks ="SELECT description,status,id FROM tasks Where '$id' = user_id ";
-if($query_find_tasks != NULL)
+$data = array('id' => $id);
+$query = $db -> prepare("SELECT description,status,id FROM tasks Where '$id' = user_id");
+$query->execute($data);
+if($query-> rowCount() > 0)
     {
-        $result = mysqli_query($link, $query_find_tasks) or die("Ошибка " . mysqli_error($link));
-        if($result)
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) 
         {
-            while ($row = mysqli_fetch_array($result)) 
+            if($row['status'] == 1)
             {
-                if($row['status'] == 1)
-                {
-                    $ready = "Unready";
-                }
-                if($row['status'] == 0)
-                {
-                    $ready = "Ready";
-                }
-                $task_id = $row['id'];
-                $status = $row['status'];
-                echo "<form action=\"tasklist.php\" method=\"POST\" name=\"ChangeTask\">";
-                echo $row['description'];
-                echo "<p></p>";
-                echo "<input type =\"submit\" value=\"$ready\" name=\"ready\">";
-                echo "<input type=\"submit\" value=\"Delete\" name=\"delete\">";
-                echo "<input type=\"hidden\" name=\"Id\" value=\"$task_id\"/>";
-                echo "<input type=\"hidden\" name=\"status\" value=\"$status\"/>";
-                if($row['status'] == 1)
-                {
-                    echo "<img src=\"green_circle.png\">";
-                }
-                if($row['status'] == 0)
-                {
-                    echo "<img src=\"red_circle.png\">";
-                }
-                echo "<p></p>";
-                echo "</form>";
-            
+                $ready = "Unready";
             }
+            if($row['status'] == 0)
+            {
+                $ready = "Ready";
+            }
+            $task_id = $row['id'];
+            $status = $row['status'];
+            echo "<form action=\"tasklist.php\" method=\"POST\" name=\"ChangeTask\">";
+            echo $row['description'];
+            echo "<p></p>";
+            echo "<input type =\"submit\" value=\"$ready\" name=\"ready\">";
+            echo "<input type=\"submit\" value=\"Delete\" name=\"delete\">";
+            echo "<input type=\"hidden\" name=\"Id\" value=\"$task_id\"/>";
+            echo "<input type=\"hidden\" name=\"status\" value=\"$status\"/>";
+            if($row['status'] == 1)
+            {
+                echo "<img src=\"green_circle.png\">";
+            }
+            if($row['status'] == 0)
+            {
+                echo "<img src=\"red_circle.png\">";
+            }
+            echo "<p></p>";
+            echo "</form>";
+        
         }
+        
     }
 }
 ?>
@@ -141,5 +136,5 @@ if($query_find_tasks != NULL)
             <!-- HTML CODE -->
             
 <?php
-CreateTasks($id,$link);
+CreateTasks($id,$db);
 ?>

@@ -9,9 +9,13 @@
 <body>
 <form action="main.php" method="POST" name="form-register">
 Имя:
-<input type="text" name="register_name">
+<p></p>
+<input type="text" name="login">
+<p></p>
 Пароль:
-<input type="password" name="register_password">
+<p></p>
+<input type="password" name="password">
+<p></p>
 <input type="submit" name="btn_submit_register" value="Войти или зарегистрироваться">
 </form>
 </body>

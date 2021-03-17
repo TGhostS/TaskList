@@ -1,60 +1,48 @@
 <?php
 require_once 'connection.php'; // подключаем скрипт
- 
-// подключаемся к серверу
-$link = mysqli_connect($host, $user, $password, $database) 
-    or die("Ошибка " . mysqli_error($link));
- 
-// выполняем операции с базой данных
-$login = htmlentities(mysqli_real_escape_string($link, $_POST['register_name']));
-$password = htmlentities(mysqli_real_escape_string($link, $_POST['register_password']));
-/********************************************/
-            /*Login*/
-$query ="SELECT login,password FROM users Where '$login' = login and '$password' = password";
-$result_task = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
-if($result_task)
+session_start();
+if(isset($_SESSION["user_id"]))
 {
-    while ($row = mysqli_fetch_array($result_task)) 
-    {
-        if($row['login'] != null && $row['password'] != null)
-        {
-            setcookie("login",$row['login']);
-            setcookie("password",$row['password']);
-            header('location: tasklist.php');
-            exit();
-        }
-    }
-      
+    header("Location: tasklist.php");
 }
-/********************************************/
-            /*Register*/
-if(preg_match("/^[a-zA-Z0-9]+$/",$_POST['register_name']))
+/**********************************************************/
+                /*Login user */
+if(!empty($_POST['login']) && !empty($_POST['password']))
 {
-    if ($login != "" && $password != "")
+    $password=htmlspecialchars($_POST['password']);
+    $login=htmlspecialchars($_POST['login']);
+    $data = array( 'login' => $login, 'password' => $password ); 
+    $query = $db -> prepare("SELECT id FROM users WHERE login = :login and password = :password");
+    $query->execute($data);
+    if($query->rowCount() > 0)
     {
-        $date = date('Y-m-d');
-        $query = "INSERT INTO users (login,password,created_at) VALUES ('$login','$password','$date')";
-        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link)); 
-            if($result)
-            {
-                mysqli_close($link);
-                setcookie("login",$login);
-                setcookie("password",$password);
-                header('location: tasklist.php');
-                exit();
-            }
-            
+        while ($row = mysqli_fetch_assoc($query)) {
+            $_SESSION['user_id'] = $row['id'];
+            header('location: tasklist.php');
+        }
     }
     else
     {
-        echo "Логин или пароль отсутствуют";
-        mysqli_close($link);
+        /**********************************************************/
+                            /*register user */
+        $data = array( 'login' => $login, 'password' => $password,'date' => date("Y-m-d")); 
+        $query = $db -> prepare("INSERT INTO users (login,password,created_at) VALUES (:login,:password,:date)");
+        $query->execute($data);
+        $data = array( 'login' => $login, 'password' => $password ); 
+        $query = $db -> prepare("SELECT id FROM users WHERE login = :login and password = :password");
+        $query->execute($data);
+        if($query->rowCount() > 0)
+        {
+            echo $query;
+            while ($row = mysqli_fetch_assoc($query)) {
+                $_SESSION['user_id'] = $row['id'];
+                header('location: tasklist.php');
+            }
+        }
     }
 }
 else
 {
-    echo "Логин может содержать только буквы английского алфавита";
-    mysqli_close($link);
+    echo "Поля не могут быть пустыми";
 }
-
-?>
+    ?>
