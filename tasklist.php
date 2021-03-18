@@ -13,7 +13,7 @@ $user_id = $_SESSION["user_id"];
                 /*Delete All Tasks */
 if(isset($_POST['RemoveAll']))
 {
-    $data = array('id' => $id);
+    $data = array('id' => $user_id);
     $query = $db -> prepare("DELETE FROM tasks WHERE user_id = :id ");
     $query -> execute($data);
     header('location: tasklist.php');
@@ -22,7 +22,7 @@ if(isset($_POST['RemoveAll']))
                 /*Ready All Tasks */
 if(isset($_POST['ReadyAll']))
 {
-    $data = array('id' => $id);
+    $data = array('id' => $user_id);
     $query = $db -> prepare("UPDATE tasks SET status = 1 WHERE user_id = :id");
     $query->execute($data);
     header('location: tasklist.php');
@@ -103,8 +103,11 @@ if($query->rowCount() > 0)
 </html>
 <!----------------------------------------------------->
             <!-- HTML CODE -->
-            
+
+              
 <?php
+  /**********************************************************/
+                    /* create Tasks */    
 $query = CreateTasks($user_id,$db);
 if(isset($query))
 {
