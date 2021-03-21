@@ -1,22 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-<form action="main.php" method="POST" name="form-register">
-Имя:
-<p></p>
-<input type="text" name="login">
-<p></p>
-Пароль:
-<p></p>
-<input type="password" name="password">
-<p></p>
-<input type="submit" name="btn_submit_register" value="Войти или зарегистрироваться">
-</form>
-</body>
-</html>
+<?php
+session_start();
+include "Controllers/class_controller.php";
+include "Models/requests.php";
+include "Views/class_view.php";
+$model = new Model();
+$controller = new Controller($model);
+$view = new View($controller, $model);
+$db = model::get_database();
+if (!isset($_SESSION['user_id']))
+{
+    Controller::analize_POST_register($db);
+    view::create_auth_page();
+}
+else
+{
+    Controller::analize_POST_tasklist($db,$_SESSION['user_id']);
+    view::main_menu_tasks();
+    view::create_tasks_menu($_SESSION['user_id'],$db);
+}
+?>
