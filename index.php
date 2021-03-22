@@ -1,21 +1,30 @@
 <?php
 session_start();
-include "Controllers/class_controller.php";
-include "Models/requests.php";
-include "Views/class_view.php";
+
+spl_autoload_register(function ($class) {
+    if ($class  == "Model")
+    {
+        include 'Model/' . $class .'.php';
+    }
+    if ($class == "Controller")
+    {
+        include 'Controller/' . $class .'.php';
+    }
+    
+});
 $model = new Model();
 $controller = new Controller($model);
-$view = new View($controller, $model);
 $db = model::get_database();
 if (!isset($_SESSION['user_id']))
 {
     Controller::analize_POST_register($db);
-    view::create_auth_page();
+    include "Views/register.php";
 }
 else
 {
     Controller::analize_POST_tasklist($db,$_SESSION['user_id']);
-    view::main_menu_tasks();
-    view::create_tasks_menu($_SESSION['user_id'],$db);
+    include "Views/tasklist.php";
+    include "Views/tasks.php";
+    view_tasks($_SESSION['user_id'],$db);
 }
 ?>
