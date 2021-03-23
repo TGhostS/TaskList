@@ -7,7 +7,7 @@
 <p></p>
 <input type="submit" name="RemoveAll" value="Remove All">
 <input type="submit" name="ReadyAll" value="Ready All">
-<input type="hidden" name="controller" value="Controller"/>
+<input type="hidden" name="controller" value="Tasklist"/>
 <input type="hidden" name="method" value="change_all_tasks"/>
 <p></p>
 </form>
