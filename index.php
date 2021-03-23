@@ -14,7 +14,7 @@ spl_autoload_register(function ($c) {
     
 });
 $Model = new Model();
-$Controller = new Controller();
+$Controller = new Register();
 $Controller = new Tasklist();
 if($_POST['controller']) {
     $class = trim(strip_tags($_POST['controller']));
@@ -29,7 +29,7 @@ if(class_exists($class)) {
 }
 if(!isset($_SESSION['user_id']))
     {
-        Controller::show_page();
+        Register::show_page();
     }
     else
     {
