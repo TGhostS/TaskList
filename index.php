@@ -25,14 +25,10 @@ if(class_exists($class)) {
     $obj = new $class;
     $obj->{$method}($class);
 }
-if (!isset($_SESSION['user_id']))
+else 
 {
-    include "Views/register.php";
+    $Controller->{"register_or_tasklist_page"}($class);
 }
-else
-{
-    include "Views/tasklist.php";
-    include "Views/tasks.php";
-}
+
 
 ?>

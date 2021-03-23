@@ -110,4 +110,16 @@ class Controller {
             header('location: tasklist.php');
         }
     }
+    public static function register_or_tasklist_page()
+    {
+        if (!isset($_SESSION['user_id']))
+        {
+            include "Views/register.php";
+        }
+        else
+        {
+            include "Views/tasklist.php";
+            include "Views/tasks.php";
+        }
+    }
 }
