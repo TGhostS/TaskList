@@ -1,4 +1,5 @@
-<?php include "header.php";
+<?php
+ include "header.php";
 ?>
 <form action="index.php" method="POST" name="ChangeTask">
 <input type="text" name="NewTask" placeholder="Enter Text..." >
@@ -6,5 +7,7 @@
 <p></p>
 <input type="submit" name="RemoveAll" value="Remove All">
 <input type="submit" name="ReadyAll" value="Ready All">
+<input type="hidden" name="controller" value="Controller"/>
+<input type="hidden" name="method" value="change_all_tasks"/>
 <p></p>
 </form>

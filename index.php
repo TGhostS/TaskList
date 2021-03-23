@@ -12,19 +12,27 @@ spl_autoload_register(function ($class) {
     }
     
 });
-$model = new Model();
-$controller = new Controller($model);
-$db = model::get_database();
+$Model = new Model();
+$Controller = new Controller();
+if($_POST['controller']) {
+    $class = trim(strip_tags($_POST['controller']));
+}  
+if($_POST['method']) {
+ $method = trim(strip_tags($_POST['method']));
+}
+if(class_exists($class)) {
+ 
+    $obj = new $class;
+    $obj->{$method}($class);
+}
 if (!isset($_SESSION['user_id']))
 {
-    Controller::analize_POST_register($db);
     include "Views/register.php";
 }
 else
 {
-    Controller::analize_POST_tasklist($db,$_SESSION['user_id']);
     include "Views/tasklist.php";
     include "Views/tasks.php";
-    view_tasks($_SESSION['user_id'],$db);
 }
+
 ?>

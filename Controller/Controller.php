@@ -1,9 +1,5 @@
 <?php
 class Controller {
-    private $model;
-    public function __construct($model) {
-        $this->model = $model;
-    }
     public static function register_or_login($password,$login,$db)
     {
         $query = model::get_user_id($password,$login,$db);
@@ -39,50 +35,16 @@ class Controller {
         if(!isset($_SESSION['user_id']))
         {
             Controller::set_session($password,$login,$db);
+            return true;
+        }
+        else
+        {
+            return null;
         }
     }
-    public static function analize_POST_tasklist($db,$user_id)
+    public static function auth()
     {
-        if(isset($_POST['AddTask']))
-        {
-            if(isset($_POST['NewTask']))
-            {
-                model::add_task($db,$user_id);
-                header('location: index.php');
-            }
-        }
-        if(isset($_POST['RemoveAll']))
-        {
-            model::delete_alltasks_from_user($user_id,$db);
-            header('location: index.php');
-        }
-        if(isset($_POST['ReadyAll']))
-        {
-            model::set_readyall($user_id,$db);
-        }
-        if(isset($_POST['ready']))
-        {
-            $id = $_POST['Id'];
-            if($_POST['status'] == 1)
-            {
-                model::set_unready_task($user_id,$id,$db);
-                header('location: index.php');
-            }
-            if($_POST['status'] == 0)
-            {  
-                model::set_ready_task($user_id,$id,$db);
-                header('location: index.php');
-            }
-        }
-        if(isset($_POST['delete']))
-        {
-            $id = $_POST['Id'];
-            model::delete_task_from_user($id,$user_id,$db);
-            header('location: index.php');
-        }
-    }
-    public static function analize_POST_register($db)
-    {
+        $db = model::get_database();
         if(!empty($_POST['login']) && !empty($_POST['password']))
         {
             $password=htmlspecialchars($_POST['password']);
@@ -90,12 +52,62 @@ class Controller {
             if(Controller::register_or_login($password,$login,$db) == "register")
             {
                 Controller::user_register($password,$login,$db);
+                header('location: tasklist.php');
             }
             else
             {
                 Controller::user_login($password,$login,$db);
+                header('location: tasklist.php');
             }
 
+        }
+    }
+    public static function changetask()
+    {
+        $db = model::get_database();
+        $user_id = $_SESSION['user_id'];
+        if(isset($_POST['ready']))
+        {
+            $id = $_POST['Id'];
+            if($_POST['status'] == 1)
+            {
+                model::set_unready_task($user_id,$id,$db);
+                header('location: tasklist.php');
+            }
+            if($_POST['status'] == 0)
+            {  
+                model::set_ready_task($user_id,$id,$db);
+                header('location: tasklist.php');
+            }
+        }
+        if(isset($_POST['delete']))
+        {
+            $id = $_POST['Id'];
+            model::delete_task_from_user($id,$user_id,$db);
+            header('location: tasklist.php');
+        }
+    }
+    public static function change_all_tasks()
+    {
+        $db = model::get_database();
+        $user_id = $_SESSION['user_id'];
+        if(isset($_POST['AddTask']))
+        {
+            if(isset($_POST['NewTask']))
+            {
+                model::add_task($db,$user_id);
+                header('location: tasklist.php');
+            }
+        }
+        if(isset($_POST['RemoveAll']))
+        {
+            model::delete_alltasks_from_user($user_id,$db);
+            header('location: tasklist.php');
+        }
+        if(isset($_POST['ReadyAll']))
+        {
+            model::set_readyall($user_id,$db);
+            header('location: tasklist.php');
         }
     }
 }

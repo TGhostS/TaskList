@@ -64,7 +64,6 @@ public static function get_all_tasks_from_user($user_id,$db)
     $data = array('user_id' => $user_id);
     $query = $db ->prepare("SELECT description,status,id FROM tasks Where $user_id = :user_id");
     $query->execute($data);
-    $query->fetch(PDO::FETCH_ASSOC);
     return $query;
 }
 public static function add_task($db,$user_id)
