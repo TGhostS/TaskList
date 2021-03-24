@@ -1,8 +1,11 @@
 <?php
-class main extends Controller{
-    public static function show_page(){
-        include "Views/header.php";
-        include "Views/menu.php";
-    }
+class main extends ACore {
+	
+	public function get_content() {
+		
+		$result = $this->m->get_main_content();
+		return $result;
+	
+	}
 }
 ?>

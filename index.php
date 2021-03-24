@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+header("Content-Type:text/html;charset=UTF-8");
 spl_autoload_register(function ($c) {
     if(file_exists("Controller/".$c.".php")) 
     {
@@ -12,16 +12,18 @@ spl_autoload_register(function ($c) {
     }
 });
 $class = "main";
-$method = "show_page";
-if($_GET['controller']) {
-    $class = trim(strip_tags($_GET['controller']));
-}  
-if($_GET['method']) {
- $method = trim(strip_tags($_GET['method']));
+
+if($_GET['option']) {
+	$class = trim(strip_tags($_GET['option']));
 }
+
 if(class_exists($class)) {
- 
-    $obj = new $class;
-    $obj->{$method}($class);
+	
+	$obj = new $class;
+	$obj->get_body($class);
 }
+else {
+	exit("<p>Нет данные для входа</p>");
+}
+
 ?>
