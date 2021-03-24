@@ -1,4 +1,9 @@
 <?php
-class Controller{
-}
+abstract class Controller
+{
+    protected $m;
+    public function __construct() {
+        $this->m = new model();;
+    }
+} 
 ?>

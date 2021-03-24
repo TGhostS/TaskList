@@ -1,4 +1,6 @@
 <?php
+include "../Model/Model.php";
+$model = new Model();
 $db = Model::get_database();
 $user_id = $_SESSION['user_id'];
 if(model::get_all_tasks_from_user($user_id,$db)->rowCount() > 0)
@@ -16,7 +18,7 @@ if(model::get_all_tasks_from_user($user_id,$db)->rowCount() > 0)
         }
         $task_id = $row['id'];
         $status = $row['status'];
-        echo "<form action=\"index.php\" method=\"POST\" name=\"ChangeTask\">";
+        echo "<form action=\"index.php\" method=\"GET\" name=\"ChangeTask\">";
         echo $row['description'];
         echo "<p></p>";
         echo "<input type =\"submit\" value=\"$ready\" name=\"ready\">";

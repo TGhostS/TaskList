@@ -57,7 +57,4 @@ class Register extends Controller{
 
         }
     }
-    public static function show_page(){
-        include "Views/register.php";
-    }
 }
