@@ -1,48 +1,62 @@
-<?php
+<?php 
+class login extends Controller{
+    public static function register_or_login($password,$login,$db)
+    {
+        $query = model::get_user_id($password,$login,$db);
+        if($query->rowCount() > 0)
+        {
+            return "login";
+        }
+        else
+        {
+            return "register";
+        }
+    }
+    public static function set_session($password,$login,$db)
+    {
+        $query = model::get_user_id($password,$login,$db);
+        if($query->rowCount() > 0)
+        {
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) 
+            {
+                $_SESSION['user_id'] = $row['id'];
+                break;
+            }
+        }
+    }
+    public static function user_register($password,$login,$db)
+    {
+        model::add_user($password,$login,$db);
+        login::set_session($password,$login,$db);
 
-class login extends ACore{
-	
-	protected function obr() {
-		$login = strip_tags(mysqli_real_escape_string(ACore::$m,$_POST['login']));
-		$password = strip_tags(mysqli_real_escape_string(ACore::$m,$_POST['password']));
+    }
+    public static function user_login($password,$login,$db)
+    {
+        if(isset($_SESSION['user_id']))
+        {
+            login::set_session($password,$login,$db);
+        }
+    }
+    public static function auth()
+    {
+        $db = Controller::get_database();
+        
+        if(!empty($_POST['login']) && !empty($_POST['password']))
+        {
+            $password=htmlspecialchars($_POST['password']);
+            $login=htmlspecialchars($_POST['login']);
+            if(login::register_or_login($password,$login,$db) == "register")
+            {
+                login::user_register($password,$login,$db);
+                header('location: main.php');
+            }
+            else
+            {
+                login::user_login($password,$login,$db);
+                header('location: main.php');
+            }
 
-		if(!empty($login) AND !empty($password)) {
-			$password = md5($password);
-			$query = "SELECT id FROM users WHERE login='$login' AND pass = '$password'";
-			
-			if(!$result = mysqli_query(ACore::$m,$query)) {
-				exit(mysqli_error(ACore::$m));
-			}
-			
-			if(mysqli_num_rows($result) == 1) {
-				$_SESSION['user'] = 'REG';
-				header("Location:?option=admin");
-				exit;
-			}
-			else {
-				exit("Таого пользователя нет");
-			}
-		}
-		else {
-			exit("Заолните обязательные поля");
-		}
-	}
-	
-	public function get_content() {
-		echo "<div id='main'>";
-		
-print <<<ECHO
-<form action='' method='POST'>
-<p>Login:<br />
-<input type='text' name='login'>
-</p>
-<p>Password:<br />
-<input type='password' name='password'>
-</p>
-<p>
-<p><input type='submit' name='button' value='Войти'></p></form>
-ECHO;
-		echo "</div></div>";		
-	}
+        }
+    }
 }
 ?>

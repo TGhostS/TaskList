@@ -1,11 +1,16 @@
 <?php
-class main extends ACore {
-	
-	public function get_content() {
-		
-		$result = $this->m->get_main_content();
-		return $result;
-	
-	}
-}
-?>
+class main extends Controller{ 
+    public static function showpage()
+    {
+        if(isset($_SESSION['user_id']))
+        {
+            require_once 'Views/tasklist.php';
+            require_once 'Views/tasks.php';
+        }
+        else
+        {
+            require_once "Views/register.php";
+        }
+    }
+} 
+?> 

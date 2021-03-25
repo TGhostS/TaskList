@@ -1,5 +1,5 @@
 <?php
-include "../Model/Model.php";
+include "Model/Model.php";
 $model = new Model();
 $db = Model::get_database();
 $user_id = $_SESSION['user_id'];
@@ -18,14 +18,14 @@ if(model::get_all_tasks_from_user($user_id,$db)->rowCount() > 0)
         }
         $task_id = $row['id'];
         $status = $row['status'];
-        echo "<form action=\"index.php\" method=\"GET\" name=\"ChangeTask\">";
+        echo "<form action=\"index.php\" method=\"POST\" name=\"ChangeTask\">";
         echo $row['description'];
         echo "<p></p>";
         echo "<input type =\"submit\" value=\"$ready\" name=\"ready\">";
         echo "<input type=\"submit\" value=\"Delete\" name=\"delete\">";
         echo "<input type=\"hidden\" name=\"Id\" value=\"$task_id\"/>";
         echo "<input type=\"hidden\" name=\"status\" value=\"$status\"/>";
-        echo "<input type=\"hidden\" name=\"controller\" value=\"Tasklist\"/>";
+        echo "<input type=\"hidden\" name=\"controller\" value=\"OneTask\"/>";
         echo "<input type=\"hidden\" name=\"method\" value=\"changetask\"/>";
         if($row['status'] == 1)
         {

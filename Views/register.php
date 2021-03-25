@@ -2,7 +2,7 @@
 include 'header.php';
 ?>
 <title>Register</title>
-<form action="index.php" method="GET" name="form-register">
+<form action="index.php" method="POST" name="form-register">
 Имя:
 <p></p>
 <input type="text" name="login">
@@ -11,7 +11,7 @@ include 'header.php';
 <p></p>
 <input type="password" name="password">
 <p></p>
-<input type="hidden" name="controller" value="register"/>
+<input type="hidden" name="controller" value="login"/>
 <input type="hidden" name="method" value="auth"/>
 <input type="submit" name="btn_submit_register" value="Войти или зарегистрироваться">
 </form>
