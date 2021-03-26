@@ -39,7 +39,7 @@ class login extends Controller{
     }
     public static function auth()
     {
-        $db = Controller::get_database();
+        $db = Model::get_database();
         
         if(!empty($_POST['login']) && !empty($_POST['password']))
         {
@@ -48,12 +48,12 @@ class login extends Controller{
             if(login::register_or_login($password,$login,$db) == "register")
             {
                 login::user_register($password,$login,$db);
-                header('location: main.php');
+                header('location: Controller.php');
             }
             else
             {
                 login::user_login($password,$login,$db);
-                header('location: main.php');
+                header('location: Controller.php');
             }
 
         }

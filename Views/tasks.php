@@ -25,7 +25,7 @@ if(model::get_all_tasks_from_user($user_id,$db)->rowCount() > 0)
         echo "<input type=\"submit\" value=\"Delete\" name=\"delete\">";
         echo "<input type=\"hidden\" name=\"Id\" value=\"$task_id\"/>";
         echo "<input type=\"hidden\" name=\"status\" value=\"$status\"/>";
-        echo "<input type=\"hidden\" name=\"controller\" value=\"OneTask\"/>";
+        echo "<input type=\"hidden\" name=\"controller\" value=\"ChangeTasks\"/>";
         echo "<input type=\"hidden\" name=\"method\" value=\"changetask\"/>";
         if($row['status'] == 1)
         {
