@@ -9,18 +9,18 @@ class ChangeTasks extends Controller{
             if(isset($_POST['NewTask']))
             {
                 model::add_task($db,$user_id);
-                header('location: Controller.php');
+                Header("Refresh:0");
             }
         }
         if(isset($_POST['RemoveAll']))
         {
             model::delete_alltasks_from_user($user_id,$db);
-            header('location: Controller.php');
+            Header("Refresh:0");
         }
         if(isset($_POST['ReadyAll']))
         {
             model::set_readyall($user_id,$db);
-            header('location: Controller.php');
+            Header("Refresh:0");
         }
     }
     public static function changetask()
@@ -33,19 +33,19 @@ class ChangeTasks extends Controller{
             if($_POST['status'] == 1)
             {
                 model::set_unready_task($user_id,$id,$db);
-                header('location: Controller.php');
+                Header("Refresh:0");
             }
             if($_POST['status'] == 0)
             {  
                 model::set_ready_task($user_id,$id,$db);
-                header('location: Controller.php');
+                Header("Refresh:0");
             }
         }
         if(isset($_POST['delete']))
         {
             $id = $_POST['Id'];
             model::delete_task_from_user($id,$user_id,$db);
-            header('location: Controller.php');
+            Header("Refresh:0");
         }
     }
 }

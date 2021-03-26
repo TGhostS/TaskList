@@ -10,8 +10,8 @@ spl_autoload_register(function ($c) {
         require_once "Model/".$c.".php";
     }
 });
-$class = "Controller";
-$method = "showpage";
+$class = "main";
+$method = "choose_page";
 if($_POST['controller']) {
     $class = trim(strip_tags($_POST['controller']));
 }  

@@ -1,6 +1,4 @@
 <?php
-include "Model/Model.php";
-$model = new Model();
 $db = Model::get_database();
 $user_id = $_SESSION['user_id'];
 if(model::get_all_tasks_from_user($user_id,$db)->rowCount() > 0)
