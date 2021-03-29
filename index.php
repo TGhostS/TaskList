@@ -23,4 +23,5 @@ if(class_exists($class)) {
     $obj = new $class;
     $obj->{$method}($class);
 }
+echo $_SESSION['user_data'];
 ?>

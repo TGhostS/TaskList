@@ -48,12 +48,12 @@ class login extends Controller{
             if(login::register_or_login($password,$login,$db) == "register")
             {
                 login::user_register($password,$login,$db);
-                Header("Refresh:0");
+                Header("Location: http://localhost/index.php");
             }
             else
             {
                 login::user_login($password,$login,$db);
-                Header("Refresh:0");
+                Header("Location: http://localhost/index.php");
             }
 
         }

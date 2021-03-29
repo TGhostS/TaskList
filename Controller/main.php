@@ -8,8 +8,7 @@ class main extends Controller{
         }
         else
         {
-            Controller::showpage("tasklist");
-            Controller::showpage("tasks");
+            tasklist::open_page();
         }
     }
 }
