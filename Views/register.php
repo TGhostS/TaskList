@@ -2,7 +2,7 @@
 include 'header.php';
 ?>
 <title>Register</title>
-<form action="index.php" method="POST" name="form-register">
+<form action="index.php" method="GET" name="form-register">
 Имя:
 <p></p>
 <input type="text" name="login">

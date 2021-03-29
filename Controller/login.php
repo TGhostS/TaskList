@@ -41,19 +41,19 @@ class login extends Controller{
     {
         $db = Model::get_database();
         
-        if(!empty($_POST['login']) && !empty($_POST['password']))
+        if(!empty($_GET['login']) && !empty($_GET['password']))
         {
-            $password=htmlspecialchars($_POST['password']);
-            $login=htmlspecialchars($_POST['login']);
+            $password=htmlspecialchars($_GET['password']);
+            $login=htmlspecialchars($_GET['login']);
             if(login::register_or_login($password,$login,$db) == "register")
             {
                 login::user_register($password,$login,$db);
-                Header("Location: http://localhost/index.php");
+                Header("Location: ?controller=tasklist&method=open_page");
             }
             else
             {
                 login::user_login($password,$login,$db);
-                Header("Location: http://localhost/index.php");
+                Header("Location: ?controller=tasklist&method=open_page");
             }
 
         }

@@ -1,6 +1,6 @@
 <?php
-    echo "<form action=\"index.php\" method=\"POST\" name=\"ChangeTask\">";
-    echo $info;
+    echo "<form action=\"index.php\" method=\"GET\" name=\"ChangeTask\">";
+    echo $row['description'];
     echo "<p></p>";
     echo "<input type =\"submit\" value=\"$ready\" name=\"ready\">";
     echo "<input type=\"submit\" value=\"Delete\" name=\"delete\">";

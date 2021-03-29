@@ -12,16 +12,15 @@ spl_autoload_register(function ($c) {
 });
 $class = "main";
 $method = "choose_page";
-if($_POST['controller']) {
-    $class = trim(strip_tags($_POST['controller']));
+if($_GET['controller']) {
+    $class = trim(strip_tags($_GET['controller']));
 }  
-if($_POST['method']) {
- $method = trim(strip_tags($_POST['method']));
+if($_GET['method']) {
+ $method = trim(strip_tags($_GET['method']));
 }
 if(class_exists($class)) {
  
     $obj = new $class;
     $obj->{$method}($class);
 }
-echo $_SESSION['user_data'];
 ?>

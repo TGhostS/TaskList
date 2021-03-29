@@ -71,7 +71,7 @@ public static function get_all_tasks_from_user($user_id,$db)
 public static function add_task($db,$user_id)
 {
     $date = date('Y-m-d');
-    $NewTask = htmlentities($_POST['NewTask']);
+    $NewTask = htmlentities($_GET['NewTask']);
     $data = array('user_id' => $user_id,'NewTask' => $NewTask,'date' => $date);
     $query = $db -> prepare("INSERT INTO tasks (user_id,description,created_at) VALUES (:user_id,:NewTask,:date)");
     $query->execute($data);
