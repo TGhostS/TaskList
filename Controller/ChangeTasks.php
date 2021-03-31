@@ -1,6 +1,11 @@
 <?php
 class ChangeTasks extends Controller
 {
+    protected $m;
+    public function __construct()
+    {
+        $this -> m = new Tasklists();
+    }
     public  function change_all_tasks()
     {
         $user_id = $_SESSION['user_id'];
