@@ -1,6 +1,6 @@
 <?php
 class main extends Controller{
-    public static function choose_page()
+    public  function choose_page()
     {
         if(empty($_SESSION['user_id']))
         {
@@ -8,7 +8,7 @@ class main extends Controller{
         }
         else
         {
-            tasklist::open_page();
+            header("Location: ?controller=tasklist&method=open_page");
         }
     }
 }
