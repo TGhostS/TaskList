@@ -1,4 +1,7 @@
 <?php
+/*********************************************************/
+/*       Delete,set Ready or Unready chosen task         */
+/*********************************************************/
 class ChangeTasks extends Controller
 {
     protected $m;
@@ -13,7 +16,7 @@ class ChangeTasks extends Controller
         {
             if(isset($_GET['NewTask']))
             {
-                $this -> m -> add_task($user_id);
+                $this -> m -> add_task($user_id,htmlentities($_GET['NewTask']));
                 header("Location: ?controller=tasklist&method=open_page");
             }
         }

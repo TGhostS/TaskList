@@ -1,4 +1,7 @@
 <?php
+/*********************************************************/
+/*      load need classes,working with requests          */
+/*********************************************************/
 session_start();
 spl_autoload_register(function ($c) {
     if(file_exists("Controller/".$c.".php")) 

@@ -1,4 +1,7 @@
 <?php 
+/*********************************************************/
+/*            register or login new user                 */
+/*********************************************************/
 class login extends Controller
 {
     protected $m;
@@ -12,22 +15,19 @@ class login extends Controller
         {
             $login = htmlspecialchars($_POST['login']);
             $password = htmlspecialchars($_POST['password']);
-            $query = $this -> t ->get_user_id($password,$login);
-            if($query->rowCount() > 0)
+            $query = $this -> m ->get_user_id($password,$login);
+            if(!empty($query))
             {
+                echo $query;
                 session_start();
-                while ($row = $query->fetch(PDO::FETCH_ASSOC))
-                {
-                    $_SESSION['user_id'] = $row['id'];
-                    break;
-                }
+                $_SESSION['user_id'] = $query;
                 Header("Location: ?controller=tasklist&method=open_page");
             }
             else
             {
                 $this -> m ->add_user($password,$login);
                 session_start();
-                $id = $this -> m ->get_user_id($password,$login);
+                $id = $this -> m ->get_user_id($login,$password);
                 if(!empty($id))
                 {
                     $_SESSION['user_id'] = $id;

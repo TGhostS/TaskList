@@ -1,4 +1,7 @@
 <?php
+/*********************************************************/
+/*   Working with requests from ChangeTask Controller    */
+/*********************************************************/
 class Tasklists extends Model
 {
     public  function delete_alltasks_from_user($user_id)
@@ -43,10 +46,9 @@ class Tasklists extends Model
         }
         return $output;
     }
-    public  function add_task($user_id)
+    public  function add_task($user_id,$NewTask)
     {
         $date = date('Y-m-d');
-        $NewTask = htmlentities($_GET['NewTask']);
         $data = array('user_id' => $user_id,'NewTask' => $NewTask,'date' => $date);
         $query = $this -> db-> prepare("INSERT INTO tasks (user_id,description,created_at) VALUES (:user_id,:NewTask,:date)");
         $query->execute($data);
