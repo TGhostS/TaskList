@@ -15,13 +15,11 @@ class login extends Controller
         {
             $login = htmlspecialchars($_POST['login']);
             $password = htmlspecialchars($_POST['password']);
-            $query = $this -> m ->get_user_id($password,$login);
-            if(!empty($query))
+            $id = $this -> m ->get_user_id($password,$login);
+            if(!empty($id))
             {
-                echo $query;
-                session_start();
-                $_SESSION['user_id'] = $query;
-                Header("Location: ?controller=tasklist&method=open_page");
+                echo $id;
+                $_SESSION['user_id'] = $id;
             }
             else
             {
@@ -32,8 +30,8 @@ class login extends Controller
                 {
                     $_SESSION['user_id'] = $id;
                 }
-                Header("Location: ?controller=tasklist&method=open_page");
             }
+            Header("Location: ?controller=tasklist&method=open_page");
         }
         else
         {

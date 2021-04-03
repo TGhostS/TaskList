@@ -16,6 +16,7 @@ class User extends Model
                 return $row['id'];
             }
         } 
+        return null;
     }
     public  function add_user($password,$login)
     {
